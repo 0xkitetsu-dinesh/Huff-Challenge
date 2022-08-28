@@ -1,0 +1,17 @@
+[profile.default]
+src = 'src'
+out = 'out'
+libs = ['lib']
+solc_version = '0.8.15'
+auto_detect_solc = false
+optimizer = true
+optimizer_runs = 10000 # Default amount
+ffi = true
+fuzz_runs = 1_000
+via-ir = true
+remappings = [
+  "forge-std=lib/forge-std/src/",
+  "foundry-huff=lib/foundry-huff/src/",
+]
+
+# See more config options https://github.com/foundry-rs/foundry/tree/master/config

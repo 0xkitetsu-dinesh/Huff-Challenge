@@ -1,0 +1,90 @@
+/* Interface */
+#define function set(uint256,bytes32) nonpayable returns ()
+#define function isSolved() nonpayable returns (bool)
+
+#define constant S0 = FREE_STORAGE_POINTER()
+
+#define macro SET() = takes (0) returns (0) {
+    0x24 calldataload   // [number]
+    0x04 calldataload   // [Storage_slot,number]
+    sstore           
+}
+
+#define macro OP_STOP(final_check) = takes (0) returns (0){ final_check jump }
+#define macro OP_ADD(loop) = takes (2) returns (1){ add loop jump}
+#define macro OP_MUL(loop) = takes (2) returns (1){ mul loop jump}
+#define macro OP_SUB(loop) = takes (2) returns (1){ sub loop jump}
+#define macro OP_DIV(loop) = takes (2) returns (1){ div loop jump}
+#define macro OP_PUSH1(loop) = takes (0) returns (1){ 
+    0x00 mload dup1 0xff and
+    swap1 0x08 shr
+    0x00 mstore
+    loop jump
+}
+#define macro OP_EQ(loop) = takes (2) returns (1){ eq loop jump}
+#define macro OP_SHL(loop) = takes (2) returns (1){ shl loop jump}
+#define macro OP_SHR(loop) = takes (2) returns (1){ shr loop jump} 
+
+
+#define jumptable__packed OP_TABLE {
+    op_stop op_add op_mul op_sub op_div op_push1 op_eq op_shl op_shr      
+}
+
+#define macro ISSOLVED() = takes (0) returns (0) {
+    msize sload
+    msize mstore
+
+    loop:
+        0x20 0x02    
+        0x00 mload   
+        dup1 0xff and     
+
+        swap1 0x08 shr 0x00 mstore  
+
+        0x01 shl     
+        __tablestart(OP_TABLE) 
+        add 0x3e codecopy    
+        mload   
+        jump
+
+    final_check:
+        0x800 eq
+        0x00 mstore
+        0x20 0x00 return
+
+    op_stop:
+        OP_STOP(final_check)
+    op_add:
+        OP_ADD(loop)
+    op_mul:
+        OP_MUL(loop)
+    op_sub:
+        OP_SUB(loop)
+    op_div:
+        OP_DIV(loop)
+    op_push1:
+        OP_PUSH1(loop)
+    op_eq:
+        OP_EQ(loop)
+    op_shl:
+        OP_SHL(loop)
+    op_shr:
+        OP_SHR(loop)
+}
+
+
+#define macro MAIN() = takes (0) returns (0) {
+    // Identify which function is being called.
+    0x00 calldataload 0xE0 shr
+    dup1 __FUNC_SIG(set) eq set jumpi
+    dup1 __FUNC_SIG(isSolved) eq isSolved jumpi
+
+    // Revert if no function matches
+    0x00 0x00 revert
+
+    set:
+        SET()
+    isSolved:
+        ISSOLVED()
+    
+}
