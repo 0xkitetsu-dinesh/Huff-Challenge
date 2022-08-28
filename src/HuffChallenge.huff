@@ -2,8 +2,6 @@
 #define function set(uint256,bytes32) nonpayable returns ()
 #define function isSolved() nonpayable returns (bool)
 
-#define constant S0 = FREE_STORAGE_POINTER()
-
 #define macro SET() = takes (0) returns (0) {
     0x24 calldataload   // [number]
     0x04 calldataload   // [Storage_slot,number]
