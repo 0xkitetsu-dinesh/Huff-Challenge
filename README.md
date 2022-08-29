@@ -18,4 +18,4 @@ interface IHuffChallenge {
 deployed at [0xbFd9Bed7Cf6ebd303465314Ca00a6DFC853085c8](https://mumbai.polygonscan.com/address/0xbFd9Bed7Cf6ebd303465314Ca00a6DFC853085c8#code)
 
 ### [code](src/HuffChallenge.huff) 
-![](HuffChallengeImg.png)
+![](HuffChallengeCode.png)
