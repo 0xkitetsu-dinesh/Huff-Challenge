@@ -8,7 +8,6 @@
     sstore           
 }
 
-#define macro OP_STOP(final_check) = takes (0) returns (0){ final_check jump }
 #define macro OP_ADD(loop) = takes (2) returns (1){ add loop jump}
 #define macro OP_MUL(loop) = takes (2) returns (1){ mul loop jump}
 #define macro OP_SUB(loop) = takes (2) returns (1){ sub loop jump}
@@ -23,7 +22,6 @@
 #define macro OP_SHL(loop) = takes (2) returns (1){ shl loop jump}
 #define macro OP_SHR(loop) = takes (2) returns (1){ shr loop jump} 
 
-
 #define jumptable__packed OP_TABLE {
     op_stop op_add op_mul op_sub op_div op_push1 op_eq op_shl op_shr      
 }
@@ -36,22 +34,17 @@
         0x20 0x02    
         0x00 mload   
         dup1 0xff and     
-
         swap1 0x08 shr 0x00 mstore  
-
         0x01 shl     
         __tablestart(OP_TABLE) 
         add 0x3e codecopy    
         mload   
         jump
 
-    final_check:
+    op_stop:
         0x800 eq
         0x00 mstore
         0x20 0x00 return
-
-    op_stop:
-        OP_STOP(final_check)
     op_add:
         OP_ADD(loop)
     op_mul:
