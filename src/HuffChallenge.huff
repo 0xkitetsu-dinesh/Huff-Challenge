@@ -5,7 +5,8 @@
 #define macro SET() = takes (0) returns (0) {
     0x24 calldataload   // [number]
     0x04 calldataload   // [Storage_slot,number]
-    sstore           
+    sstore
+    stop           
 }
 
 #define macro OP_ADD(loop) = takes (2) returns (1){ add loop jump}
@@ -38,7 +39,7 @@
         0x01 shl     
         __tablestart(OP_TABLE) 
         add 0x3e codecopy    
-        mload   
+        mload 0xffff and   
         jump
 
     op_stop:
