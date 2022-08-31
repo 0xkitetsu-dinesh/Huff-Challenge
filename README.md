@@ -1,5 +1,8 @@
 # Huff Challenge
 
+### solved by
+- [@axiseth](https://twitter.com/alexberegszaszi)
+
 ### contract code
 
 ```js
